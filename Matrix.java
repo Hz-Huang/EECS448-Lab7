@@ -2,13 +2,13 @@
 public class Matrix {
 	
 	private int size;
-	private int[][] x;
+	private double[][] x;
 	
 	//Constructor of the Matrix
 	public Matrix(int s)
 	{
 		size = s;
-		x = new int[size][size];
+		x = new double[size][size];
 	}
 	
 	//return the size of the matrix
@@ -23,7 +23,7 @@ public class Matrix {
 	}
 	
 	//get the entry in the matrix
-	public int getEntry(int a, int b)
+	public double getEntry(int a, int b)
 	{
 		return x[a][b];
 	}
@@ -73,5 +73,33 @@ public class Matrix {
 			}
 		}
 		return det;
+	}
+	
+	public Matrix inverse()
+	{
+		Matrix inv = new Matrix(size);
+		double det = determinant();
+		
+		for (int i = 0; i < size; ++i)
+		{
+			for (int j = 0; j < size; ++j)
+			{
+				inv.x[i][j] = Math.pow(-1.0, (double)i + j) * subMatrix(j, i).determinant() / det;
+			}
+		}
+		
+		return inv;
+	}
+	
+	public void print()
+	{
+		for(int i = 0; i < size; i++)
+    	{
+    		for(int j = 0; j < size; j++)
+    		{
+    			System.out.print(x[i][j] + " ");
+    		}
+    		System.out.println("");
+    	}
 	}
 }
