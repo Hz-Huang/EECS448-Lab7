@@ -14,4 +14,10 @@ public class Matrix {
 	{
 		return x.length;
 	}
+	
+	//get the entry in the matrix
+	public int getEntry(int a, int b)
+	{
+		return x[a][b];
+	}
 }
