@@ -8,4 +8,10 @@ public class Matrix {
 	{
 		x = m;
 	}
+	
+	//return the size of the matrix
+	public int getSize()
+	{
+		return x.length;
+	}
 }
