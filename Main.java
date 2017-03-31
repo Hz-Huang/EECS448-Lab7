@@ -1,5 +1,6 @@
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.util.Scanner;
@@ -11,8 +12,11 @@ public class Main {
 		int[][] m = null;
 		String Ifilename;
 		String Ofilename;
+		File file;
 		FileReader FR = null;
 		BufferedReader BR = null;
+		FileWriter FW = null;
+		BufferedWriter BW = null;
 		Scanner kb = new Scanner(System.in);
 		
 		System.out.print("Input a file name: ");
@@ -21,12 +25,14 @@ public class Main {
 		System.out.print("Input an out file name: ");
 		Ofilename = kb.nextLine();
 		System.out.print("\n");
+		file = new File(Ofilename);
 
 		
-		//reading the file and constructor
+		//reading the file and construct both the matrix and its inverse matrix
+		//then write the matrix, determinant, and inverse into a file
 		try{
 			int t = 0;
-			FR = new FileReader("input.txt");
+			FR = new FileReader(Ifilename);
 			BR = new BufferedReader(FR);
 			String line;
 			line = BR.readLine();
@@ -37,14 +43,11 @@ public class Main {
 				if(t == 0)
 				{					
 					size = Integer.parseInt(words[0]);
-					//System.out.println("size: "+ size);
 					m = new int[size][size];
 					t++;
 				}
 				else
 				{
-					//System.out.println("words: "+ words[0]);
-					//System.out.println("while");
 					for(int i = 0; i < size; i++)
 			    	{
 			    		m[t-1][i] = Integer.parseInt(words[i]);
@@ -54,24 +57,70 @@ public class Main {
 
 				if(size == 0)
 				{
-					
+					continue;
 				}
 				else if(t == size+1)
 			    {
-			    	Matrix m1= new Matrix(m);
-			    	System.out.println("Matri:");
+			    	Matrix m1 = new Matrix(size);
 			    	for(int i = 0; i < size; i++)
 			    	{
 			    		for(int j = 0; j < size; j++)
 			    		{
-			    			System.out.print(m[i][j]+ "");
+			    			m1.setEntry(i, j, m[i][j]);
 			    		}
-			    		System.out.println("");
 			    	}
+			    	Matrix inv = m1.inverse();
 			    	t = 0;
+			    	
+			    	//start to write the output file
+			    	try{
+						FW = new FileWriter(file.getAbsoluteFile(), true);
+						BW = new BufferedWriter(FW);
+						
+						BW.write("M=");
+						BW.newLine();
+						for(int i = 0; i< m1.getSize(); i++)
+						{
+							for(int j = 0; j < m1.getSize(); j++)
+							{
+								BW.write(m1.getEntry(i, j) + " ");
+							}
+							BW.newLine();
+						}
+						BW.write("DET: "+ m1.determinant());
+						BW.newLine();
+						BW.write("Minv= ");
+						BW.newLine();
+						for(int i = 0; i< m1.getSize(); i++)
+						{
+							for(int j = 0; j < m1.getSize(); j++)
+							{
+								BW.write(inv.getEntry(i, j) + " ");
+							}
+							BW.newLine();
+						}
+					}
+					catch(Exception e)
+					{
+						System.out.println(e.getMessage());
+					}
+			    	finally 
+			    	{
+						try 
+						{
+							if (BW != null)
+								BW.close();
+
+							if (FW != null)
+								FW.close();
+						} 
+						catch (Exception e) 
+						{
+							e.printStackTrace();
+						}
+					}
 			    }
 			    line = BR.readLine();
-			    //System.out.println("line"+line);
 			}
 			BR.close();
 		}
@@ -79,8 +128,7 @@ public class Main {
 		{
 			System.out.println(e.getMessage());
 		}
-		
-	}
+	}	
 }
 
 
