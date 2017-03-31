@@ -1,18 +1,20 @@
 
 public class Matrix {
 	
+	private int size;
 	private int[][] x;
 	
 	//Constructor of the Matrix
 	public Matrix(int s)
 	{
-		x = new int[s][s];
+		size = s;
+		x = new int[size][size];
 	}
 	
 	//return the size of the matrix
 	public int getSize()
 	{
-		return x.length;
+		return size;
 	}
 	
 	public void setEntry(int r, int c,int n)
@@ -28,7 +30,25 @@ public class Matrix {
 	
 	public Matrix subMatrix(int r, int c)
 	{
-		sub = 
+		Matrix sub = new Matrix(size-1);
+		int row = 0;
+		for (int i = 0; i < size; ++i)
+		{
+			if (i != r)
+			{
+				int col = 0;
+				for (int j = 0; j < size; ++j)
+				{
+					if (j != c)
+					{
+						sub.setEntry(row, col, x[i][j]);
+					}
+					col++;
+				}
+			}
+			++row;
+		}
+		
 		
 		return sub;
 	}
